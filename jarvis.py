@@ -3,7 +3,6 @@ import pyttsx3
 import datetime
 import pywhatkit
 import wikipedia
-import pyjokes
 import webbrowser
 
 listener = sr.Recognizer()
@@ -12,7 +11,6 @@ voices = jarvis.getProperty('voices')
 jarvis.setProperty('voice', voices[0].id)
 contacts = {
     "Mrs. Ahmed": "01836449716",
-    " Lucky": "01878217889",
 }
 
 def talk(text):
@@ -23,11 +21,11 @@ def take_command():
     try:
         with sr.Microphone() as mic:
             print('listening...')
-            voice = listener.listen(mic)
-            command = listener.recognize_google(voice)
+            voice=listener.listen(mic)
+            command=listener.recognize_google(voice)
             command = command.lower()
             if 'jarvis' in command:
-                command = command.replace('jarvis', '')
+                command=command.replace('jarvis', '')
     except:
         pass
     return command
@@ -35,29 +33,27 @@ def take_command():
 def run_jarvis():
     talk("I'm listening, Sir")
     while True:
-        command = take_command()
+        command=take_command()
         if 'stop listening' in command:
             talk("Let me know when you're ready for the next command. Thank you.")
             break
         
         if 'time' in command:
-            time = datetime.datetime.now().strftime('%I:%M %p')
+            time=datetime.datetime.now().strftime('%I:%M %p')
             print(time)
             talk('Current time is ' + time)
         
         elif 'play' in command:
             song = command.replace('play', '')
-            talk('playing ' + song)
+            talk('playing '+ song)
             pywhatkit.playonyt(song)
         
         elif 'tell me about' in command:
-            look_for = command.replace('tell me about', '')
+            look_for=command.replace('tell me about', '')
             info = wikipedia.summary(look_for, 1)
             print(info)
             talk(info)
         
-        elif 'joke' in command:
-            talk(pyjokes.get_joke())
         
         elif 'search' in command:
             search_query = command.replace('search', '').strip()
@@ -65,13 +61,13 @@ def run_jarvis():
             pywhatkit.search(search_query)
         
         elif 'search on facebook' in command:
-            person = command.replace('search on facebook', '').strip()
+            person=command.replace('search on facebook', '').strip()
             url = f'https://www.facebook.com/search/top/?q={person}'
             talk(f'Searching for {person} on Facebook')
             webbrowser.open(url)
         
         elif 'call' in command:
-            name = command.replace('call', '').strip()
+            name=command.replace('call', '').strip()
             if name in contacts:
                 talk(f'Calling {name} on WhatsApp')
                 pywhatkit.sendwhatmsg_instantly(contacts[name], '', wait_time=10)
@@ -79,7 +75,7 @@ def run_jarvis():
                 talk("Sorry sir, I can't find the contact.")
         
         elif 'text' in command:
-            name = command.split('text')[1].split(' ')[0].strip()
+            name=command.split('text')[1].split(' ')[0].strip()
             message_start = command.find(f"{name}") + len(name)
             message = command[message_start:].strip()
             if name in contacts:
